@@ -35,7 +35,8 @@ public class KitManager implements ClientModInitializer {
     final NethpotPvp nethpot = new NethpotPvp();
     final MacePvp mace = new MacePvp();
     final TntMinecartPvp tnt = new TntMinecartPvp();
-    // 0 OFF, 1 SWORD, 2 NETHPOT, 3 MACE, 4 TNT_CART
+    final ElytraMacePvp elytraMace = new ElytraMacePvp();
+    // 0 OFF, 1 SWORD, 2 NETHPOT, 3 MACE, 4 TNT_CART, 5 ELYTRA_MACE
     int mode = 0;
     static Player locked = null;
 
@@ -82,6 +83,7 @@ public class KitManager implements ClientModInitializer {
         else if (mode == 2) nethpot.tick(mc, target);
         else if (mode == 3) mace.tick(mc, target);
         else if (mode == 4) tnt.tick(mc, target);
+        else if (mode == 5) elytraMace.tick(mc, target);
     }
 
     void start(Minecraft mc) {
@@ -127,6 +129,15 @@ public class KitManager implements ClientModInitializer {
                 mode = 4;
                 tnt.onActivate(mc);
             }
+            case "ELYTRA_MACE" -> {
+                if (!elytraMace.matches(mc)) {
+                    msg(mc, "Inventory me elytra, mace, chestplate ya (rocket / pearl+wind charge) kam hai");
+                    return;
+                }
+                locked = null;
+                mode = 5;
+                elytraMace.onActivate(mc);
+            }
             default -> {
                 msg(mc, "Ye PvP abhi repo me nahi hai: " + sel);
                 return;
@@ -147,6 +158,7 @@ public class KitManager implements ClientModInitializer {
         else if (mode == 2) nethpot.onDeactivate(mc);
         else if (mode == 3) mace.onDeactivate(mc);
         else if (mode == 4) tnt.onDeactivate(mc);
+        else if (mode == 5) elytraMace.onDeactivate(mc);
     }
 
     static void msg(Minecraft mc, String text) {
@@ -248,11 +260,17 @@ public class KitManager implements ClientModInitializer {
         return true;
     }
 
+    /** Ye items hotbar se hataye nahi jate (naya item lane ke liye). */
+    static boolean isKeeper(ItemStack s) {
+        return isSword(s) || isAxe(s) || hasFoodComponent(s) || s.is(Items.MACE)
+                || s.is(Items.WIND_CHARGE) || s.is(Items.ELYTRA) || s.is(Items.ENDER_PEARL)
+                || s.is(Items.FIREWORK_ROCKET) || s.is(Items.SHIELD);
+    }
+
     static int freeHotbarSlot(Inventory inv) {
         for (int i = 0; i < 9; i++) if (inv.getItem(i).isEmpty()) return i;
         for (int i = 8; i >= 0; i--) {
-            ItemStack s = inv.getItem(i);
-            if (!isSword(s) && !isAxe(s) && !hasFoodComponent(s)) return i;
+            if (!isKeeper(inv.getItem(i))) return i;
         }
         return 8;
     }
