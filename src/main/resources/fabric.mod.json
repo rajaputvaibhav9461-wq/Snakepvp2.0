@@ -19,7 +19,7 @@
 			"com.example.ExampleMod"
 		],
 		"client": [
-			"com.example.client.ExampleModClient"
+			"com.snakepvp.KitManager"
 		]
 	},
 	"mixins": [
