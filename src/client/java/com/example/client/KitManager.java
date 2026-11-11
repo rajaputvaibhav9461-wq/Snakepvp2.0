@@ -33,7 +33,9 @@ public class KitManager implements ClientModInitializer {
     KeyMapping menuKey;
     final SwordPvp sword = new SwordPvp();
     final NethpotPvp nethpot = new NethpotPvp();
-    // 0 OFF, 1 SWORD, 2 NETHPOT
+    final MacePvp mace = new MacePvp();
+    final TntMinecartPvp tnt = new TntMinecartPvp();
+    // 0 OFF, 1 SWORD, 2 NETHPOT, 3 MACE, 4 TNT_CART
     int mode = 0;
     static Player locked = null;
 
@@ -78,6 +80,8 @@ public class KitManager implements ClientModInitializer {
         Player target = findTarget(mc);
         if (mode == 1) sword.tick(mc, target);
         else if (mode == 2) nethpot.tick(mc, target);
+        else if (mode == 3) mace.tick(mc, target);
+        else if (mode == 4) tnt.tick(mc, target);
     }
 
     void start(Minecraft mc) {
@@ -105,6 +109,24 @@ public class KitManager implements ClientModInitializer {
                 mode = 2;
                 nethpot.onActivate(mc);
             }
+            case "MACE" -> {
+                if (!mace.matches(mc)) {
+                    msg(mc, "Inventory me mace ya wind charge nahi hai");
+                    return;
+                }
+                locked = null;
+                mode = 3;
+                mace.onActivate(mc);
+            }
+            case "TNT_CART" -> {
+                if (!tnt.matches(mc)) {
+                    msg(mc, "Inventory me tnt minecart, rail, flint, crossbow/bow ya arrow kam hai");
+                    return;
+                }
+                locked = null;
+                mode = 4;
+                tnt.onActivate(mc);
+            }
             default -> {
                 msg(mc, "Ye PvP abhi repo me nahi hai: " + sel);
                 return;
@@ -123,6 +145,8 @@ public class KitManager implements ClientModInitializer {
     void release(Minecraft mc) {
         if (mode == 1) sword.onDeactivate(mc);
         else if (mode == 2) nethpot.onDeactivate(mc);
+        else if (mode == 3) mace.onDeactivate(mc);
+        else if (mode == 4) tnt.onDeactivate(mc);
     }
 
     static void msg(Minecraft mc, String text) {
@@ -299,4 +323,4 @@ public class KitManager implements ClientModInitializer {
         double dz = Math.max(Math.max(b.minZ - p.z, 0), p.z - b.maxZ);
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
-  }
+        }
