@@ -152,4 +152,4 @@ public class FriendList {
             g.drawString(this.font, "Abhi ON: " + cur, rightX, 60 + PVP_NAMES.length * 24 + 6, 0xFFFF55);
         }
     }
-          }
+    }
