@@ -38,7 +38,9 @@ public class KitManager implements ClientModInitializer {
     final ElytraMacePvp elytraMace = new ElytraMacePvp();
     final PCrtingPvp pcrt = new PCrtingPvp();
     final SmpPvp smp = new SmpPvp();
-    // 0 OFF, 1 SWORD, 2 NETHPOT, 3 MACE, 4 TNT_CART, 5 ELYTRA_MACE, 6 P_CRTING, 7 SMP
+    final BreachSweepPvp breach = new BreachSweepPvp();
+    final CrystalPvp crystal = new CrystalPvp();
+    // 0 OFF, 1 SWORD, 2 NETHPOT, 3 MACE, 4 TNT_CART, 5 ELYTRA_MACE, 6 P_CRTING, 7 SMP, 8 BREACH_SWEEP, 9 CRYSTAL
     int mode = 0;
     static Player locked = null;
 
@@ -88,6 +90,8 @@ public class KitManager implements ClientModInitializer {
         else if (mode == 5) elytraMace.tick(mc, target);
         else if (mode == 6) pcrt.tick(mc, target);
         else if (mode == 7) smp.tick(mc, target);
+        else if (mode == 8) breach.tick(mc, target);
+        else if (mode == 9) crystal.tick(mc, target);
     }
 
     void start(Minecraft mc) {
@@ -160,6 +164,24 @@ public class KitManager implements ClientModInitializer {
                 mode = 7;
                 smp.onActivate(mc);
             }
+            case "BREACH_SWEEP" -> {
+                if (!breach.matches(mc)) {
+                    msg(mc, "Inventory me sword ya breach enchant wala mace nahi hai");
+                    return;
+                }
+                locked = null;
+                mode = 8;
+                breach.onActivate(mc);
+            }
+            case "CRYSTAL" -> {
+                if (!crystal.matches(mc)) {
+                    msg(mc, "Inventory me sword, obsidian ya end crystal nahi hai");
+                    return;
+                }
+                locked = null;
+                mode = 9;
+                crystal.onActivate(mc);
+            }
             default -> {
                 msg(mc, "Ye PvP abhi repo me nahi hai: " + sel);
                 return;
@@ -183,6 +205,8 @@ public class KitManager implements ClientModInitializer {
         else if (mode == 5) elytraMace.onDeactivate(mc);
         else if (mode == 6) pcrt.onDeactivate(mc);
         else if (mode == 7) smp.onDeactivate(mc);
+        else if (mode == 8) breach.onDeactivate(mc);
+        else if (mode == 9) crystal.onDeactivate(mc);
     }
 
     static void msg(Minecraft mc, String text) {
@@ -289,7 +313,8 @@ public class KitManager implements ClientModInitializer {
         return isSword(s) || isAxe(s) || hasFoodComponent(s) || s.is(Items.MACE)
                 || s.is(Items.WIND_CHARGE) || s.is(Items.ELYTRA) || s.is(Items.ENDER_PEARL)
                 || s.is(Items.FIREWORK_ROCKET) || s.is(Items.SHIELD)
-                || s.is(Items.TOTEM_OF_UNDYING) || s.is(Items.SPLASH_POTION);
+                || s.is(Items.TOTEM_OF_UNDYING) || s.is(Items.SPLASH_POTION)
+                || s.is(Items.END_CRYSTAL) || s.is(Items.OBSIDIAN);
     }
 
     static int freeHotbarSlot(Inventory inv) {
@@ -366,4 +391,4 @@ public class KitManager implements ClientModInitializer {
         double dz = Math.max(Math.max(b.minZ - p.z, 0), p.z - b.maxZ);
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
-            }
+    }
