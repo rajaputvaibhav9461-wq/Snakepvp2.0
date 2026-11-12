@@ -18,7 +18,7 @@ public class FriendList {
     static final List<Boolean> safe = new ArrayList<>();
 
     // PvP list: ek time par sirf ek ON. null = koi nahi
-    static final String[] PVP_NAMES = { "SWORD", "NETHPOT", "MACE", "TNT_CART", "ELYTRA_MACE" };
+    static final String[] PVP_NAMES = { "SWORD", "NETHPOT", "MACE", "TNT_CART", "ELYTRA_MACE", "P_CRTING", "SMP" };
     static String selectedPvp = null;
 
     // ---------------------------------------------------------------- friend data
@@ -151,4 +151,4 @@ public class FriendList {
             g.drawString(this.font, "Abhi ON: " + cur, rightX, 60 + PVP_NAMES.length * 24 + 6, 0xFFFF55);
         }
     }
-    }
+                    }
