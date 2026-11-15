@@ -1,23 +1,23 @@
 {
-	"schemaVersion": 1,
-	"id": "snakepvp",
-	"version": "${version}",
-	"name": "Snake PvP",
-	"description": "Auto PvP mod",
-	"authors": [
-		"Me"
-	],
-	"license": "CC0-1.0",
-	"environment": "client",
-	"entrypoints": {
-		"client": [
-			"com.snakepvp.KitManager"
-		]
-	},
-	"depends": {
-		"fabricloader": ">=0.20.1",
-		"minecraft": "~1.21",
-		"java": ">=21",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "snakepvp",
+  "version": "${version}",
+  "name": "Snake PvP",
+  "description": "Auto PvP mod",
+  "authors": [
+    "Me"
+  ],
+  "license": "CC0-1.0",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.snakepvp.KitManager"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "1.21",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
 }
